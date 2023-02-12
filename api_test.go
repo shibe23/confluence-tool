@@ -6,27 +6,27 @@ import (
 	"testing"
 )
 
-func createTestAPIClient() APIClient {
-	c := APIClient{}
+func createTestAPIClient() *APIClient {
 
 	domain := os.Getenv("CONFLUENCE_DOMAIN")
 	username := os.Getenv("CONFLUENCE_USER")
 	token := os.Getenv("CONFLUENCE_TOKEN")
 
-	api := c.GetAuthedAPI(domain, username, token)
+	client := NewAPIClient(domain, username, token)
 
-	if api == nil {
-		fmt.Printf("createTestAPIClient() = %v", api)
+	if client == nil {
+		fmt.Printf("createTestAPIClient() = %v", client)
 	}
-	return c
+	return client
 }
 
 func TestGetTemplate(t *testing.T) {
 	c := createTestAPIClient()
+	id := ""
 
 	t.Run("テンプレートを作成する", func(t *testing.T) {
-		if _, err := c.GetTemplate(); err != nil {
-			t.Errorf("GetTemplate() hass error: %v", err)
+		if _, err := c.GetTemplate(id); err != nil {
+			t.Errorf("GetTemplate() has error: %v", err)
 		}
 	})
 }
