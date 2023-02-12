@@ -25,7 +25,7 @@ func TestGetTemplate(t *testing.T) {
 	c := createTestAPIClient()
 
 	t.Run("テンプレートを作成する", func(t *testing.T) {
-		if err := c.GetTemplate(); err != nil {
+		if _, err := c.GetTemplate(); err != nil {
 			t.Errorf("GetTemplate() hass error: %v", err)
 		}
 	})

@@ -16,10 +16,12 @@ func (c APIClient) GetAuthedAPI(domain string, username string, token string) *g
 	return api
 }
 
-func (c APIClient) GetTemplate() error {
+func (c APIClient) GetTemplate() (string, error) {
+	content := "test"
 	error := 1
+
 	if error != 1 {
-		return fmt.Errorf("api call error: %v", error)
+		return "", fmt.Errorf("api call error: %v", error)
 	}
-	return nil
+	return content, nil
 }
