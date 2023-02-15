@@ -1,4 +1,4 @@
-package confluence_tool
+package create_subpage
 
 import (
 	"reflect"
