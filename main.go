@@ -1,7 +1,11 @@
+/*
+Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+*/
 package main
 
 import (
 	"confluence-tool/api"
+	"confluence-tool/cmd"
 	"fmt"
 	"os"
 )
@@ -20,7 +24,7 @@ func createAPIClient() *api.APIClient {
 	return client
 }
 
-func main() {
+func runCreatePageByTitle() {
 	c := createAPIClient()
 
 	templateID := "1111111111"
@@ -39,4 +43,8 @@ func main() {
 	if err != nil {
 		fmt.Errorf("CreatePagesByTitle() has error: %v", err)
 	}
+}
+
+func main() {
+	cmd.Execute()
 }
