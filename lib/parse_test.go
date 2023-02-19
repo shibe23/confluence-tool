@@ -1,11 +1,11 @@
-package create_subpage
+package lib
 
 import (
 	"reflect"
 	"testing"
 )
 
-func TestParseValues(t *testing.T) {
+func TestParse(t *testing.T) {
 	c := CreateSubpage{}
 
 	type args struct {

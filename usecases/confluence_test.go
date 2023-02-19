@@ -1,30 +1,16 @@
-package api
+package usecases
 
 import (
-	"fmt"
-	"os"
+	"confluence-tool/api"
 	"testing"
 )
 
-func createTestAPIClient() *APIClient {
-	domain := os.Getenv("CONFLUENCE_DOMAIN")
-	username := os.Getenv("CONFLUENCE_USER")
-	token := os.Getenv("CONFLUENCE_TOKEN")
-
-	client := NewAPIClient(domain, username, token)
-
-	if client == nil {
-		fmt.Printf("createTestAPIClient() = %v", client)
-	}
-	return client
-}
-
 func TestGetTemplate(t *testing.T) {
-	c := createTestAPIClient()
+	client := api.NewAPIClient()
 	id := ""
 
 	t.Run("テンプレートを作成する", func(t *testing.T) {
-		if _, err := c.GetTemplate(id); err != nil {
+		if _, err := GetTemplate(client, id); err != nil {
 			t.Errorf("GetTemplate() has error: %v", err)
 		}
 	})
@@ -32,7 +18,7 @@ func TestGetTemplate(t *testing.T) {
 
 func TestCreatePagesByTitle(t *testing.T) {
 	t.Run("テンプレートを作成する", func(t *testing.T) {
-		c := createTestAPIClient()
+		client := api.NewAPIClient()
 
 		template := "<p>test</p>"
 		space := "~1111111111"
@@ -40,7 +26,7 @@ func TestCreatePagesByTitle(t *testing.T) {
 		title := "2023-01-30 MTG議事録 - ${temp} さん"
 		variables := []string{"test 太郎", "test 健一", "test 秀子"}
 
-		_, err := c.CreatePagesByTitle(template, space, ancestor, title, variables)
+		_, err := CreatePagesByTitle(client, template, space, ancestor, title, variables)
 		if err != nil {
 			t.Errorf("CreatePagesByTitle() has error: %v", err)
 		}
