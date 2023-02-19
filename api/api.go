@@ -4,11 +4,26 @@ import (
 	"fmt"
 	"github.com/virtomize/confluence-go-api"
 	"log"
+	"os"
 	"strings"
 )
 
 type APIClient struct {
 	api *goconfluence.API
+}
+
+func CreateAPIClient() *APIClient {
+	domain := os.Getenv("CONFLUENCE_DOMAIN")
+	username := os.Getenv("CONFLUENCE_USER")
+	token := os.Getenv("CONFLUENCE_TOKEN")
+
+	client := NewAPIClient(domain, username, token)
+
+	if client == nil {
+		fmt.Printf("createTestAPIClient() = %v", client)
+	}
+
+	return client
 }
 
 func NewAPIClient(domain string, username string, token string) *APIClient {
