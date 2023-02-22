@@ -5,8 +5,8 @@ package cmd
 
 import (
 	"confluence-tool/api"
+	"confluence-tool/content"
 	"confluence-tool/usecases"
-	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -18,24 +18,20 @@ var createCmd = &cobra.Command{
 	Short: "create tempalte space ancestor, title, variables",
 	Long:  `指定したテンプレートIDの内容で新規ページを作成する`,
 	Run: func(cmd *cobra.Command, args []string) {
-		client := api.NewAPIClient()
+		client := api.NewClient()
 
 		templateID := args[0]
+		template, _ := usecases.GetTemplate(client, templateID)
 
-		template, err := usecases.GetTemplate(client, templateID)
-		if err != nil {
-			fmt.Errorf("getTemplateError: %v", err)
+		data := content.Data{
+			Template: template,
+			Space:    args[1],
+			Ancestor: args[2],
+			Title:    args[3],
 		}
-
-		space := args[1]
-		ancestor := args[2]
-		title := args[3]
 		variables := strings.Split(args[4], "\n")
 
-		_, err = usecases.CreatePagesByTitle(client, template, space, ancestor, title, variables)
-		if err != nil {
-			fmt.Errorf("CreatePagesByTitle() has error: %v", err)
-		}
+		usecases.CreatePagesByTitle(client, data, variables)
 	},
 }
 

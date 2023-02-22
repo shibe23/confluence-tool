@@ -1,12 +1,13 @@
 package usecases
 
 import (
-	"confluence-tool/api"
+	"confluence-tool/content"
+	"confluence-tool/mock"
 	"testing"
 )
 
 func TestGetTemplate(t *testing.T) {
-	client := api.NewAPIClient()
+	client := mock.NewClient()
 	id := ""
 
 	t.Run("テンプレートを作成する", func(t *testing.T) {
@@ -17,16 +18,18 @@ func TestGetTemplate(t *testing.T) {
 }
 
 func TestCreatePagesByTitle(t *testing.T) {
-	t.Run("テンプレートを作成する", func(t *testing.T) {
-		client := api.NewAPIClient()
+	t.Run("タイトルを変更した状態で複数ページを作成する", func(t *testing.T) {
+		client := mock.NewClient()
 
-		template := "<p>test</p>"
-		space := "~1111111111"
-		ancestor := "2222222222"
-		title := "2023-01-30 MTG議事録 - ${temp} さん"
+		data := content.Data{
+			Template: "<p>test</p>",
+			Space:    "~1111111111",
+			Ancestor: "2222222222",
+			Title:    "2023-01-30 MTG議事録 - ${temp} さん",
+		}
 		variables := []string{"test 太郎", "test 健一", "test 秀子"}
 
-		_, err := CreatePagesByTitle(client, template, space, ancestor, title, variables)
+		err := CreatePagesByTitle(client, data, variables)
 		if err != nil {
 			t.Errorf("CreatePagesByTitle() has error: %v", err)
 		}

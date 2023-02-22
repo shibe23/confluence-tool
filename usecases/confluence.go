@@ -1,55 +1,34 @@
 package usecases
 
 import (
+	"confluence-tool/api"
+	"confluence-tool/content"
 	"fmt"
-	"github.com/virtomize/confluence-go-api"
 	"strings"
 )
 
-func CreatePagesByTitle(api *goconfluence.API, template string, space string, ancestor string, title string, variables []string) (bool, error) {
-
-	data := &goconfluence.Content{
-		Type: "page",
-		Ancestors: []goconfluence.Ancestor{
-			{
-				ID: ancestor, // ancestor-id optional if you want to create sub-pages
-			},
-		},
-		Body: goconfluence.Body{
-			Storage: goconfluence.Storage{
-				Value:          template, // your page content here
-				Representation: "storage",
-			},
-		},
-		Version: &goconfluence.Version{
-			Number: 1,
-		},
-		Space: &goconfluence.Space{
-			Key: space,
-		},
-	}
-
+func CreatePagesByTitle(api api.Client, data content.Data, variables []string) error {
 	for _, v := range variables {
-		replacedTitle := strings.ReplaceAll(title, "${temp}", v)
-		data.Title = replacedTitle
-		fmt.Printf("%+v", data)
-		_, err := api.CreateContent(data)
+		replacedTitle := strings.ReplaceAll(data.Title, "${temp}", v)
+
+		err := api.CreateContent(content.Data{
+			Template: data.Template,
+			Space:    data.Space,
+			Ancestor: data.Ancestor,
+			Title:    replacedTitle,
+		})
 		if err != nil {
-			fmt.Printf("create content error: %+v", err)
-			return false, err
+			fmt.Printf("api.CreateContentError: %v", err)
+			return err
 		}
 	}
-	return true, nil
+	return nil
 }
 
-func GetTemplate(api *goconfluence.API, id string) (string, error) {
-	content, err := api.GetContentByID(id, goconfluence.ContentQuery{
-		Expand: []string{"body.storage"},
-	})
-
+func GetTemplate(api api.Client, id string) (string, error) {
+	template, err := api.GetTemplateByID(id)
 	if err != nil {
-		fmt.Printf("error: %v\n", err)
+		fmt.Errorf("Can't get Template %v\n", err)
 	}
-
-	return content.Body.Storage.Value, nil
+	return template, nil
 }
