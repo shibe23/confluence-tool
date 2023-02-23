@@ -1,8 +1,8 @@
 package content
 
 type Data struct {
-	Space    string
-	Ancestor string
-	Template string
-	Title    string
+	Space    string `json:"space"`
+	Ancestor string `json:"ancestor"`
+	Template string `json:"template"`
+	Title    string `json:"title"`
 }
