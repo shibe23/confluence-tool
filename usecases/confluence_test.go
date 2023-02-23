@@ -10,7 +10,7 @@ func TestGetTemplate(t *testing.T) {
 	client := mock.NewClient()
 	id := ""
 
-	t.Run("テンプレートを作成する", func(t *testing.T) {
+	t.Run("GetTemplateは指定したIDのテンプレートを取得する", func(t *testing.T) {
 		if _, err := GetTemplate(client, id); err != nil {
 			t.Errorf("GetTemplate() has error: %v", err)
 		}
@@ -18,7 +18,7 @@ func TestGetTemplate(t *testing.T) {
 }
 
 func TestCreatePagesByTitle(t *testing.T) {
-	t.Run("タイトルを変更した状態で複数ページを作成する", func(t *testing.T) {
+	t.Run("CreatePagesByTitleはタイトルの${temp}とついた部分を指定した変数に置き換えて複数ページを作成する", func(t *testing.T) {
 		client := mock.NewClient()
 
 		data := content.Data{

@@ -51,13 +51,13 @@ func (c *client) CreateContent(content content.Data) error {
 	data := &goconfluence.Content{Type: "page",
 		Ancestors: []goconfluence.Ancestor{
 			{
-				ID: content.Ancestor, // ancestor-id optional if you want to create sub-pages
+				ID: content.Ancestor,
 			},
 		},
 		Title: content.Title,
 		Body: goconfluence.Body{
 			Storage: goconfluence.Storage{
-				Value:          content.Template, // your page content here
+				Value:          content.Template,
 				Representation: "storage",
 			},
 		},

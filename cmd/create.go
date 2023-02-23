@@ -15,7 +15,7 @@ import (
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create",
-	Short: "create tempalte space ancestor, title, variables",
+	Short: "create template space ancestor, title, variables",
 	Long:  `指定したテンプレートIDの内容で新規ページを作成する`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client := api.NewClient()
