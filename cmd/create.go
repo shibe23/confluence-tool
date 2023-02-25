@@ -6,6 +6,7 @@ package cmd
 import (
 	"confluence-tool/api"
 	"confluence-tool/content"
+	"confluence-tool/lib"
 	"confluence-tool/usecases"
 	"strings"
 
@@ -18,6 +19,9 @@ var createCmd = &cobra.Command{
 	Short: "create template space ancestor, title, variables",
 	Long:  `指定したテンプレートIDの内容で新規ページを作成する`,
 	Run: func(cmd *cobra.Command, args []string) {
+		param := content.Parameter{}
+		lib.ExtractVariables(args[0], &param)
+
 		client := api.NewClient()
 
 		templateID := args[0]

@@ -10,7 +10,7 @@ func Parse(variable string) []string {
 	return []string{"鈴木", "佐藤", "田中", "堀井"}
 }
 
-func ExtractVariables(s string, variables *content.Data) error {
+func ExtractVariables(s string, variables *content.Parameter) error {
 	err := json.Unmarshal([]byte(s), variables)
 	if err != nil {
 		return fmt.Errorf("json.Unmarshal error: %v\n", err)
