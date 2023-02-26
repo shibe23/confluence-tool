@@ -4,10 +4,11 @@ import (
 	"confluence-tool/content"
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
-func Parse(variable string) []string {
-	return []string{"鈴木", "佐藤", "田中", "堀井"}
+func Parse(variables string) []string {
+	return strings.Split(variables, "\n")
 }
 
 func ExtractVariables(s string, variables *content.Parameter) error {

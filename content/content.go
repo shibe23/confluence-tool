@@ -7,7 +7,7 @@ type Parameter struct {
 	Title      string `json:"title"`
 }
 
-type Data struct {
+type ConfluencePageInfo struct {
 	Space    string
 	Ancestor string
 	Template string

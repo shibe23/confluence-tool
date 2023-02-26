@@ -4,13 +4,20 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"confluence-tool/api"
 	"confluence-tool/content"
 	"confluence-tool/lib"
+	"confluence-tool/mock"
 	"confluence-tool/usecases"
-	"strings"
-
+	"encoding/json"
+	"fmt"
 	"github.com/spf13/cobra"
+	"io"
+	"os"
+)
+
+var (
+	pageInfoFilePath string
+	variables        string
 )
 
 // createCmd represents the create command
@@ -19,28 +26,76 @@ var createCmd = &cobra.Command{
 	Short: "create template space ancestor, title, variables",
 	Long:  `指定したテンプレートIDの内容で新規ページを作成する`,
 	Run: func(cmd *cobra.Command, args []string) {
-		param := content.Parameter{}
-		lib.ExtractVariables(args[0], &param)
+		// get target path from file.
+		fmt.Printf("pageInfoFilePath : %v\n", pageInfoFilePath)
 
-		client := api.NewClient()
+		params := content.Parameter{}
+		parseJSON(pageInfoFilePath, &params)
 
-		templateID := args[0]
-		template, _ := usecases.GetTemplate(client, templateID)
-
-		data := content.Data{
-			Template: template,
-			Space:    args[1],
-			Ancestor: args[2],
-			Title:    args[3],
+		// get variable data from file.
+		text, err := cmd.PersistentFlags().GetString("variables")
+		if err != nil {
+			fmt.Println("Invalid values.")
+			os.Exit(1)
 		}
-		variables := strings.Split(args[4], "\n")
 
-		usecases.CreatePagesByTitle(client, data, variables)
+		variables := parseTextWithNewLine(text)
+
+		//client := api.NewClient()
+		client := mock.NewClient()
+		template, err := client.GetTemplateByID(params.TemplateID)
+		if err != nil {
+			fmt.Printf("templateID is invalid. error: %v", err)
+			os.Exit(1)
+		}
+
+		data := content.ConfluencePageInfo{
+			Template: template,
+			Space:    params.Space,
+			Ancestor: params.Ancestor,
+			Title:    params.Title,
+		}
+
+		err = usecases.CreatePagesByTitle(client, data, variables)
+		if err != nil {
+			fmt.Printf("createPagesByTitle is invalid. error: %v", err)
+		}
 	},
+}
+
+func parseJSON(path string, t interface{}) bool {
+	// read file
+	file, err := os.Open(path)
+	if err != nil {
+		return true
+	}
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(t)
+	if err != nil {
+		return true
+	}
+	return false
+}
+
+func parseTextWithNewLine(path string) []string {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil
+	}
+
+	buffer, err := io.ReadAll(file)
+	if err != nil {
+		return nil
+	}
+
+	variables := lib.Parse(string(buffer))
+	return variables
 }
 
 func init() {
 	rootCmd.AddCommand(createCmd)
+	createCmd.PersistentFlags().StringVar(&pageInfoFilePath, "page-info-file", "./fixture/create_pages_by_title.json", "Information about create pages.")
+	createCmd.PersistentFlags().StringVar(&variables, "variables", "./fixture/variables.txt", "Values to replace variables in template.")
 
 	// Here you will define your flags and configuration settings.
 

@@ -22,7 +22,7 @@ func newGoConfluenceAPI() *goconfluence.API {
 
 type Client interface {
 	GetTemplateByID(templateID string) (string, error)
-	CreateContent(content content.Data) error
+	CreateContent(content content.ConfluencePageInfo) error
 }
 
 type client struct{}
@@ -45,7 +45,7 @@ func (c *client) GetTemplateByID(templateID string) (string, error) {
 	return content.Body.Storage.Value, nil
 }
 
-func (c *client) CreateContent(content content.Data) error {
+func (c *client) CreateContent(content content.ConfluencePageInfo) error {
 	goConfluenceAPI := newGoConfluenceAPI()
 
 	data := &goconfluence.Content{Type: "page",

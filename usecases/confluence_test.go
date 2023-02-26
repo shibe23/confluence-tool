@@ -21,7 +21,7 @@ func TestCreatePagesByTitle(t *testing.T) {
 	t.Run("CreatePagesByTitleはタイトルの${temp}とついた部分を指定した変数に置き換えて複数ページを作成する", func(t *testing.T) {
 		client := mock.NewClient()
 
-		data := content.Data{
+		data := content.ConfluencePageInfo{
 			Template: "<p>test</p>",
 			Space:    "~1111111111",
 			Ancestor: "2222222222",

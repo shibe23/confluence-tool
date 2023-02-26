@@ -45,7 +45,7 @@ func TestExtractVariables(t *testing.T) {
 
 		isEqual := reflect.DeepEqual(param, want)
 		if !isEqual {
-			t.Errorf("content.Data{} is not equal.\nwant: %+v\ngot : %+v\n", want, param)
+			t.Errorf("content.ConfluencePageInfo{} is not equal.\nwant: %+v\ngot : %+v\n", want, param)
 		}
 		fmt.Printf("%+v\n", param)
 	})
