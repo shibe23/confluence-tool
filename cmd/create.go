@@ -4,9 +4,9 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"confluence-tool/api"
 	"confluence-tool/content"
 	"confluence-tool/lib"
-	"confluence-tool/mock"
 	"confluence-tool/usecases"
 	"encoding/json"
 	"fmt"
@@ -27,8 +27,6 @@ var createCmd = &cobra.Command{
 	Long:  `指定したテンプレートIDの内容で新規ページを作成する`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// get target path from file.
-		fmt.Printf("pageInfoFilePath : %v\n", pageInfoFilePath)
-
 		params := content.Parameter{}
 		parseJSON(pageInfoFilePath, &params)
 
@@ -41,8 +39,7 @@ var createCmd = &cobra.Command{
 
 		variables := parseTextWithNewLine(text)
 
-		//client := api.NewClient()
-		client := mock.NewClient()
+		client := api.NewClient()
 		template, err := client.GetTemplateByID(params.TemplateID)
 		if err != nil {
 			fmt.Printf("templateID is invalid. error: %v", err)
@@ -67,12 +64,13 @@ func parseJSON(path string, t interface{}) bool {
 	// read file
 	file, err := os.Open(path)
 	if err != nil {
+		fmt.Printf("can't open file in %v. error: %v", path, err)
 		return true
 	}
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(t)
 	if err != nil {
-		return true
+		fmt.Printf("can't decode json. error:%v", err)
 	}
 	return false
 }
@@ -80,11 +78,13 @@ func parseJSON(path string, t interface{}) bool {
 func parseTextWithNewLine(path string) []string {
 	file, err := os.Open(path)
 	if err != nil {
+		fmt.Printf("can't open file in %v. error: %v", path, err)
 		return nil
 	}
 
 	buffer, err := io.ReadAll(file)
 	if err != nil {
+		fmt.Printf("can't read variables in this flie. error:%v", err)
 		return nil
 	}
 
@@ -94,8 +94,8 @@ func parseTextWithNewLine(path string) []string {
 
 func init() {
 	rootCmd.AddCommand(createCmd)
-	createCmd.PersistentFlags().StringVar(&pageInfoFilePath, "page-info-file", "./fixture/create_pages_by_title.json", "Information about create pages.")
-	createCmd.PersistentFlags().StringVar(&variables, "variables", "./fixture/variables.txt", "Values to replace variables in template.")
+	createCmd.PersistentFlags().StringVar(&pageInfoFilePath, "page-info-file", "./rules/create_pages_by_title.json", "Information about create pages.")
+	createCmd.PersistentFlags().StringVar(&variables, "variables", "./rules/create_pages_by_title_variables.txt", "Values to replace variables in template.")
 
 	// Here you will define your flags and configuration settings.
 
