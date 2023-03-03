@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2023 shibe23 <shibe23.info@gmail.com>
 */
 package cmd
 
@@ -94,8 +94,8 @@ func parseTextWithNewLine(path string) []string {
 
 func init() {
 	rootCmd.AddCommand(createCmd)
-	createCmd.PersistentFlags().StringVar(&pageInfoFilePath, "page-info-file", "./rules/create_pages_by_title.json", "Information about create pages.")
-	createCmd.PersistentFlags().StringVar(&variables, "variables", "./rules/create_pages_by_title_variables.txt", "Values to replace variables in template.")
+	createCmd.PersistentFlags().StringVar(&pageInfoFilePath, "page-info-file", "", "対象となるConfluenceについての情報をまとめたファイルへのパス")
+	createCmd.PersistentFlags().StringVar(&variables, "variables-file", "", "ページごとに差し替える文字列.")
 
 	// Here you will define your flags and configuration settings.
 
