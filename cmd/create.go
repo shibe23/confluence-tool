@@ -21,10 +21,10 @@ var (
 )
 
 // createCmd represents the create command
-var createCmd = &cobra.Command{
-	Use:   "create",
-	Short: "create template space ancestor, title, variables",
-	Long:  `指定したテンプレートIDの内容で新規ページを作成する`,
+var createFromSingleCmd = &cobra.Command{
+	Use:   "create-from-s",
+	Short: "1つのテンプレートから新規ページを作成する",
+	Long:  `1つのテンプレートから新規ページを作成する。タイトルの一部を任意の文字列に変更できる`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// get target path from file.
 		params := content.Parameter{}
@@ -93,9 +93,9 @@ func parseTextWithNewLine(path string) []string {
 }
 
 func init() {
-	rootCmd.AddCommand(createCmd)
-	createCmd.PersistentFlags().StringVar(&pageInfoFilePath, "page-info-file", "", "対象となるConfluenceについての情報をまとめたファイルへのパス")
-	createCmd.PersistentFlags().StringVar(&variables, "variables-file", "", "ページごとに差し替える文字列.")
+	rootCmd.AddCommand(createFromSingleCmd)
+	createFromSingleCmd.PersistentFlags().StringVar(&pageInfoFilePath, "page-info-file", "", "対象となるConfluenceについての情報をまとめたファイルへのパス")
+	createFromSingleCmd.PersistentFlags().StringVar(&variables, "variables-file", "", "ページごとに差し替える文字列.")
 
 	// Here you will define your flags and configuration settings.
 
