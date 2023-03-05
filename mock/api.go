@@ -18,7 +18,7 @@ func NewClient() Client {
 
 func (c *client) GetTemplateByID(templateID string) (string, error) {
 	fmt.Printf("mock templateID: %v\n", templateID)
-	return "", nil
+	return "<p>this is mock template.</p>", nil
 }
 
 func (c *client) CreateContent(content content.ConfluencePageInfo) error {
