@@ -6,12 +6,9 @@ package cmd
 import (
 	"confluence-tool/api"
 	"confluence-tool/content"
-	"confluence-tool/lib"
 	"confluence-tool/usecases"
-	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
-	"io"
 	"os"
 )
 
@@ -60,50 +57,8 @@ var createFromSingleCmd = &cobra.Command{
 	},
 }
 
-func parseJSON(path string, t interface{}) bool {
-	// read file
-	file, err := os.Open(path)
-	if err != nil {
-		fmt.Printf("can't open file in %v. error: %v", path, err)
-		return true
-	}
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(t)
-	if err != nil {
-		fmt.Printf("can't decode json. error:%v", err)
-	}
-	return false
-}
-
-func parseTextWithNewLine(path string) []string {
-	file, err := os.Open(path)
-	if err != nil {
-		fmt.Printf("can't open file in %v. error: %v", path, err)
-		return nil
-	}
-
-	buffer, err := io.ReadAll(file)
-	if err != nil {
-		fmt.Printf("can't read variables in this flie. error:%v", err)
-		return nil
-	}
-
-	variables := lib.Parse(string(buffer))
-	return variables
-}
-
 func init() {
 	rootCmd.AddCommand(createFromSingleCmd)
 	createFromSingleCmd.PersistentFlags().StringVar(&pageInfoFilePath, "page-info-file", "", "対象となるConfluenceについての情報をまとめたファイルへのパス")
 	createFromSingleCmd.PersistentFlags().StringVar(&variables, "variables-file", "", "ページごとに差し替える文字列.")
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
