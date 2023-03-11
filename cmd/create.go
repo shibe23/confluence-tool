@@ -18,9 +18,9 @@ var (
 
 // createCmd represents the create command
 var createFromSingleCmd = &cobra.Command{
-	Use:   "create-from-s",
-	Short: "1つのテンプレートから新規ページを作成する",
-	Long:  `1つのテンプレートから新規ページを作成する。タイトルの一部を任意の文字列に変更できる`,
+	Use:   "create",
+	Short: "jsonの定義ファイルからページを作成する",
+	Long:  `jsonの定義ファイルからページを作成する`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// get target path from file.
 		params := content.Parameter{}
@@ -34,7 +34,6 @@ var createFromSingleCmd = &cobra.Command{
 				fmt.Printf("createPagesByTitle is invalid. error: %v", err)
 			}
 		}
-
 	},
 }
 
