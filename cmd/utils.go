@@ -18,7 +18,7 @@ func parseJSON(path string, target interface{}) bool {
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(target)
 	if err != nil {
-		fmt.Printf("can't decode json. error:%v", err)
+		fmt.Printf("can't decode json. error:%v\n file: %v\n", err, path)
 	}
 	return false
 }

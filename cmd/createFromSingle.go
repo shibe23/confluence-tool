@@ -9,12 +9,11 @@ import (
 	"confluence-tool/usecases"
 	"fmt"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var (
-	pageInfoFilePath string
-	variables        string
+	path      string
+	variables string
 )
 
 // createCmd represents the create command
@@ -25,40 +24,21 @@ var createFromSingleCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		// get target path from file.
 		params := content.Parameter{}
-		parseJSON(pageInfoFilePath, &params)
-
-		// get variable data from file.
-		text, err := cmd.PersistentFlags().GetString("variables")
-		if err != nil {
-			fmt.Println("Invalid values.")
-			os.Exit(1)
-		}
-
-		variables := parseTextWithNewLine(text)
+		parseJSON(path, &params)
 
 		client := api.NewClient()
-		template, err := client.GetTemplateByID(params.TemplateID)
-		if err != nil {
-			fmt.Printf("templateID is invalid. error: %v", err)
-			os.Exit(1)
+
+		for _, v := range params.Keys {
+			err := usecases.CreatePagesByTitle(client, v)
+			if err != nil {
+				fmt.Printf("createPagesByTitle is invalid. error: %v", err)
+			}
 		}
 
-		data := content.ConfluencePageInfo{
-			Template: template,
-			Space:    params.Space,
-			Ancestor: params.Ancestor,
-			Title:    params.Title,
-		}
-
-		err = usecases.CreatePagesByTitle(client, data, variables)
-		if err != nil {
-			fmt.Printf("createPagesByTitle is invalid. error: %v", err)
-		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(createFromSingleCmd)
-	createFromSingleCmd.PersistentFlags().StringVar(&pageInfoFilePath, "page-info-file", "", "対象となるConfluenceについての情報をまとめたファイルへのパス")
-	createFromSingleCmd.PersistentFlags().StringVar(&variables, "variables-file", "", "ページごとに差し替える文字列.")
+	createFromSingleCmd.PersistentFlags().StringVar(&path, "path", "", "対象となるConfluenceについての情報をまとめたファイルへのパス")
 }
