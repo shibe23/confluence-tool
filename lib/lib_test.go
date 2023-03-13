@@ -28,7 +28,17 @@ func TestParse(t *testing.T) {
 }
 
 func TestExtractVariables(t *testing.T) {
-	s := `{"title":"2023-01-30 MTG議事録 - ${temp} さん", "space": "~1111111111", "ancestor": "2222222222", "templateID": "12345678"}`
+	s := `{
+  "keys": [
+    {
+      "title": "2023-03-01 MTG議事録 - ${temp} さん",
+      "value": "田中 光一",
+      "space": "~1111111111",
+      "ancestor": "1234567890",
+      "templateID": "1122334455"
+    }
+	]
+}`
 	param := content.Parameter{}
 	t.Run("ExtractVariablesはJSONをVariable Typeに変換する", func(t *testing.T) {
 		err := ExtractVariables(s, &param)
@@ -36,11 +46,15 @@ func TestExtractVariables(t *testing.T) {
 			t.Errorf("ExtractVariables() failed: %v", err)
 		}
 
-		want := content.Parameter{
-			TemplateID: "12345678",
+		request := content.Request{
+			TemplateID: "1122334455",
+			Value:      "田中 光一",
 			Space:      "~1111111111",
-			Ancestor:   "2222222222",
-			Title:      "2023-01-30 MTG議事録 - ${temp} さん",
+			Ancestor:   "1234567890",
+			Title:      "2023-03-01 MTG議事録 - ${temp} さん",
+		}
+		want := content.Parameter{
+			Keys: []content.Request{request},
 		}
 
 		isEqual := reflect.DeepEqual(param, want)
