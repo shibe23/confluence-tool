@@ -31,7 +31,7 @@ func TestExtractVariables(t *testing.T) {
 	s := `{
   "keys": [
     {
-      "title": "2023-03-01 MTG議事録 - ${temp} さん",
+      "title": "2023-03-01 MTG議事録 - ${value} さん",
       "value": "田中 光一",
       "space": "~1111111111",
       "ancestor": "1234567890",
@@ -51,7 +51,7 @@ func TestExtractVariables(t *testing.T) {
 			Value:      "田中 光一",
 			Space:      "~1111111111",
 			Ancestor:   "1234567890",
-			Title:      "2023-03-01 MTG議事録 - ${temp} さん",
+			Title:      "2023-03-01 MTG議事録 - ${value} さん",
 		}
 		want := content.Parameter{
 			Keys: []content.Request{request},

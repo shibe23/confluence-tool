@@ -7,14 +7,14 @@ import (
 )
 
 func TestCreatePagesByTitle(t *testing.T) {
-	t.Run("CreatePagesByTitleはタイトルの${temp}とついた部分を指定した変数に置き換えて複数ページを作成する", func(t *testing.T) {
+	t.Run("CreatePagesByTitleはタイトルの${value}とついた部分を指定した変数に置き換えて複数ページを作成する", func(t *testing.T) {
 		client := mock.NewClient()
 
 		data := content.Request{
 			TemplateID: "12345678",
 			Space:      "~1111111111",
 			Ancestor:   "2222222222",
-			Title:      "2023-01-30 MTG議事録 - ${temp} さん",
+			Title:      "2023-01-30 MTG議事録 - ${value} さん",
 		}
 
 		err := CreatePagesByTitle(client, data)

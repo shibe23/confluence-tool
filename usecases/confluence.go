@@ -14,7 +14,7 @@ func CreatePagesByTitle(api api.Client, data content.Request) error {
 		return err
 	}
 
-	replacedTitle := strings.ReplaceAll(data.Title, "${temp}", data.Value)
+	replacedTitle := strings.ReplaceAll(data.Title, "${value}", data.Value)
 
 	err = api.CreateContent(content.ConfluencePageInfo{
 		Title:    replacedTitle,
