@@ -29,7 +29,7 @@ var createFromSingleCmd = &cobra.Command{
 		client := api.NewClient()
 
 		for _, v := range params.Keys {
-			err := usecases.CreatePagesByTitle(client, v)
+			err := usecases.CreatePagesByCustomTitle(client, v)
 			if err != nil {
 				fmt.Printf("createPagesByTitle is invalid. error: %v", err)
 			}

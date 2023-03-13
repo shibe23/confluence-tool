@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func CreatePagesByTitle(api api.Client, data content.Request) error {
+func CreatePagesByCustomTitle(api api.Client, data content.Request) error {
 	template, err := api.GetTemplateByID(data.TemplateID)
 	if err != nil {
 		fmt.Printf("templateID is invalid. error: %v", err)
